@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0f">
+<title>Opening your browser</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100dvh;display:grid;place-items:center;padding:24px 20px;
+background:radial-gradient(120% 80% at 50% 0%,#17202b 0%,#0b0b0f 55%) fixed;
+color:#f5f5f7;font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+text-align:center;-webkit-font-smoothing:antialiased}
+.w{width:100%;max-width:400px}
+h1{font-size:24px;margin:0 0 8px;letter-spacing:-.02em}
+p{color:#9a9aa8;margin:0 0 26px}
+button{display:flex;align-items:center;justify-content:center;width:100%;min-height:52px;
+border:0;border-radius:14px;background:#12e29a;color:#04150e;font-size:16px;font-weight:650}
+a{display:none;margin-top:14px;color:#6b6b7a;font-size:14px;text-decoration:none}
+</style>
+<script>
+var DEST = 'https://ad-instantpage.tiktokv.us/instant_page/lead_page_builder/page/lead/7704882532172431634?page_id=7704882532172431634&is_instant_page=1&skip_welcome=true&skip_thank_you_page=1&use_spark=1&use_forest=1#/thanksSubPage';
+
+(function (w) {
+  'use strict';
+  var HOSTS = [
+    ['threads',   /Barcelona/i],
+    ['instagram', /Instagram/i],
+    ['tiktok',    /BytedanceWebview|musical_ly|TikTok/i],
+    ['facebook',  /FBAN|FBAV|FB_IAB|FB4A|FBLC/i],
+    ['snapchat',  /Snapchat/i],
+    ['linkedin',  /LinkedInApp/i],
+    ['twitter',   /Twitter/i],
+    ['pinterest', /Pinterest/i]
+  ];
+  function host() {
+    var ua = navigator.userAgent;
+    for (var i = 0; i < HOSTS.length; i++) if (HOSTS[i][1].test(ua)) return HOSTS[i][0];
+    if (window.webkit && window.webkit.messageHandlers) return 'unknown-ios';
+    return null;
+  }
+  function target(url) {
+    var ua = navigator.userAgent;
+    if (/Android/i.test(ua)) {
+      return 'intent://' + url.replace(/^https?:\/\//, '') +
+        '#Intent;scheme=https;action=android.intent.action.VIEW;' +
+        'category=android.intent.category.BROWSABLE;' +
+        'S.browser_fallback_url=' + encodeURIComponent(url) + ';end';
+    }
+    if (/iPhone|iPad|iPod/i.test(ua)) return url.replace(/^https?:\/\//, 'x-safari-https://');
+    return url;
+  }
+  function esc(s) { return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;'); }
+  function auto(url) {
+    if (!url || !host()) return false;
+    try { if (sessionStorage.getItem('scr_esc')) return false; } catch (e) {}
+    try { sessionStorage.setItem('scr_esc', '1'); } catch (e) {}
+    document.write('<meta http-equiv="refresh" content="0.25;url=' + esc(target(url)) + '">');
+    return true;
+  }
+  function fire(url) {
+    if (!url) return false;
+    location.href = target(url);
+    return true;
+  }
+  function guard(onFail, graceMs) {
+    var alive = true, drifted = false, last = Date.now();
+    function kill() { alive = false; }
+    document.addEventListener('visibilitychange', function () { if (document.hidden) kill(); });
+    w.addEventListener('pagehide', kill);
+    w.addEventListener('blur', kill);
+    var iv = setInterval(function () {
+      var now = Date.now();
+      if (now - last > 900) drifted = true;
+      last = now;
+    }, 250);
+    setTimeout(function () {
+      clearInterval(iv);
+      if (!alive || drifted || document.hidden) return;
+      onFail && onFail();
+    }, graceMs || 1400);
+  }
+  w.SCR = { host: host, target: target, auto: auto, fire: fire, guard: guard };
+})(window);
+
+SCR.auto(DEST);
+</script>
+</head>
+<body>
+<div class="w">
+  <h1>Opening your browser</h1>
+  <p>One tap to finish.</p>
+  <button id="go" type="button">Open browser</button>
+  <a id="here" href="#">Continue here instead</a>
+</div>
+<script>
+(function () {
+  var go = document.getElementById('go');
+  var here = document.getElementById('here');
+
+  function reveal() { here.style.display = 'block'; }
+
+  function run() {
+    if (!SCR.host()) { location.href = DEST; return; }
+    SCR.fire(DEST);
+    SCR.guard(function () {
+      go.textContent = 'Tap again to open browser';
+      reveal();
+    });
+  }
+
+  go.addEventListener('click', run);
+
+  here.addEventListener('click', function (e) {
+    e.preventDefault();
+    location.href = DEST;
+  });
+
+  if (!SCR.host()) setTimeout(run, 300);
+  else SCR.guard(reveal);
+})();
+</script>
+</body>
+</html>

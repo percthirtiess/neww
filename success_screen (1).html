@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Instant Experience</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 100%; min-height: 100%; font-family: Arial, Helvetica, sans-serif; }
+  body {
+    min-height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #b4b4b4, #c5c5c5);
+  }
+  .screen { min-height: 100vh; position: relative; }
+  .topbar {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 180px; display: flex; align-items: flex-start;
+    justify-content: space-between; padding: 78px 42px 0;
+  }
+  .icon-button {
+    border: 0; background: transparent; color: white; cursor: pointer;
+    display: grid; place-items: center; padding: 0;
+  }
+  .close-icon { width: 76px; height: 76px; position: relative; }
+  .close-icon::before, .close-icon::after {
+    content: ""; position: absolute; width: 78px; height: 8px;
+    border-radius: 8px; background: #fff; left: -1px; top: 34px;
+  }
+  .close-icon::before { transform: rotate(45deg); }
+  .close-icon::after { transform: rotate(-45deg); }
+  .dots { display: flex; gap: 14px; padding: 28px 0 0; }
+  .dots span { width: 17px; height: 17px; border-radius: 50%; background: #fff; }
+  .success-mark {
+    position: absolute; width: 272px; height: 272px; border-radius: 50%;
+    background: #08d69b; left: 50%; top: 43.5%;
+    transform: translate(-50%, -50%); display: grid; place-items: center;
+  }
+  .check {
+    width: 105px; height: 58px; border-left: 19px solid #fff;
+    border-bottom: 19px solid #fff; border-radius: 8px;
+    transform: rotate(-45deg) translate(4px, -5px);
+  }
+  .main-action {
+    position: absolute; left: 4.3%; right: 2.1%; top: 73.2%;
+    height: 184px; border: 0; border-radius: 34px;
+    background: #ff2455; cursor: pointer;
+  }
+  .main-action:active { transform: scale(.995); }
+  .overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.28);
+    opacity: 0; visibility: hidden; transition: .22s; z-index: 5;
+  }
+  .overlay.open { opacity: 1; visibility: visible; }
+  .bottom-sheet {
+    position: fixed; z-index: 6; left: 0; right: 0; bottom: 0;
+    background: #fff; border-radius: 24px 24px 0 0;
+    padding: 14px 24px 34px; transform: translateY(110%);
+    transition: transform .28s ease; box-shadow: 0 -8px 30px rgba(0,0,0,.14);
+  }
+  .bottom-sheet.open { transform: translateY(0); }
+  .handle { width: 42px; height: 5px; background: #d4d4d4; border-radius: 8px; margin: 0 auto 24px; }
+  .sheet-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .sheet-item {
+    min-height: 112px; border: 1px solid #ededed; background: #fafafa;
+    border-radius: 16px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 10px;
+    color: #222; font-size: 15px; cursor: pointer;
+  }
+  .sheet-item:active { background: #f0f0f0; }
+  .sheet-item svg { width: 30px; height: 30px; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+  .blank-screen { display: none; position: fixed; inset: 0; background: #fff; z-index: 10; }
+  .blank-screen.visible { display: block; }
+  @media (max-width: 600px) {
+    .topbar { height: 120px; padding: 34px 25px 0; }
+    .close-icon { transform: scale(.62); transform-origin: top left; }
+    .dots { gap: 9px; padding-top: 13px; }
+    .dots span { width: 11px; height: 11px; }
+    .success-mark { width: 180px; height: 180px; }
+    .check { width: 70px; height: 40px; border-width: 13px; }
+    .main-action { left: 4.3%; right: 2.1%; top: 73.2%; height: 20%; border-radius: 26px; }
+  }
+</style>
+</head>
+<body>
+  <main class="screen" id="successScreen">
+    <header class="topbar">
+      <button class="icon-button close-icon" aria-label="Close" id="closeButton"></button>
+      <button class="icon-button dots" aria-label="More options" id="menuButton">
+        <span></span><span></span><span></span>
+      </button>
+    </header>
+
+    <div class="success-mark" aria-label="Success">
+      <div class="check"></div>
+    </div>
+<a href="googlechromes://youractualwebsite.com" target="_blank">
+    <button>Open in Chrome Application</button>
+</a>
+    <button id="open-browser-btn" class="main-action" onclick="forceExternalBrowser()">CLICK HERE</button>
+  </main>
+
+  <div class="overlay" id="overlay"></div>
+  <section class="bottom-sheet" id="bottomSheet" aria-label="More options">
+    <div class="handle"></div>
+    <div class="sheet-grid">
+      <button class="sheet-item" id="reportButton">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 9v4"></path><path d="M12 17h.01"></path>
+          <path d="M10.3 3.9 2.7 17a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3l-7.6-13.1a2 2 0 0 0-3.4 0Z"></path>
+        </svg>
+        <span>Report</span>
+      </button>
+      <button class="sheet-item" id="retryButton">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20 7v5h-5"></path><path d="M4 17v-5h5"></path>
+          <path d="M5.6 9A7 7 0 0 1 17.4 6L20 12"></path>
+          <path d="M18.4 15A7 7 0 0 1 6.6 18L4 12"></path>
+        </svg>
+        <span>Retry</span>
+      </button>
+    </div>
+  </section>
+
+  <div class="blank-screen" id="blankScreen"></div>
+
+<script>
+function forceExternalBrowser() {
+    const targetUrl = "youractualwebsite.com"; // Do not include https:// inside the string variable here
+
+    // Detect user platform
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isAndroid) {
+        // Android Intent system forces the native default browser to intercept
+        window.location.href = `intent://${targetUrl}#Intent;scheme=https;package=com.android.chrome;end`;
+    } else if (isIOS) {
+        // iOS deep link syntax for Chrome
+        window.location.href = `googlechromes://${targetUrl}`;
+    } else {
+        // Desktop / Fallback standard redirection
+        window.location.href = `https://${targetUrl}`;
+    }
+}
+
+        // Run instantly when the page loads inside Discord/Instagram
+    </script>
+</body>
+</html>

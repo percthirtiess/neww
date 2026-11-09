@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Monzo Rewards — Earn Up to £750</title>
+<meta name="description" content="Complete simple partner offers and claim a Monzo reward of up to £750.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --coral:#FF4F40;
+  --coral-dark:#E23A2C;
+  --ink:#0A0A0C;
+  --muted:#78787F;
+  --line:#EAEAED;
+  --soft:#F5F5F7;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',-apple-system,system-ui,sans-serif;
+  background:#fff;color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  line-height:1.45;
+  padding-bottom:110px;
+}
+.ap-page{max-width:480px;margin:0 auto;padding:34px 22px 0}
+
+/* ---------- header ---------- */
+.ap-header{display:flex;align-items:center;gap:14px;margin-bottom:26px}
+.ap-app-icon{
+  width:58px;height:58px;border-radius:15px;background:var(--coral);
+  display:grid;place-items:center;flex:none;
+  box-shadow:0 6px 18px rgba(255,79,64,.3);
+}
+.ap-app-icon svg{width:34px;height:34px}
+.ap-name{font-size:27px;font-weight:800;letter-spacing:-.04em;line-height:1.1}
+.ap-tagline{font-size:13px;color:var(--muted);margin-top:2px}
+
+/* ---------- stats ---------- */
+.ap-stats{
+  display:flex;align-items:center;justify-content:space-between;
+  border:1px solid var(--line);border-radius:16px;
+  padding:14px 8px;margin-bottom:30px;
+}
+.ap-stat{flex:1;text-align:center}
+.ap-stat-value{font-size:17px;font-weight:800;letter-spacing:-.03em}
+.ap-stat-value.ap-reward{color:var(--coral)}
+.ap-stat-label{font-size:10.5px;color:var(--muted);margin-top:3px;display:flex;justify-content:center}
+.ap-stat-divider{width:1px;height:26px;background:var(--line);flex:none}
+.ap-stars{display:inline-flex;gap:2px}
+.ap-stars i{width:7px;height:7px;background:var(--coral);border-radius:1.5px;display:block}
+.ap-stars i:last-child{opacity:.3}
+
+/* ---------- sections ---------- */
+.ap-section{margin-bottom:30px}
+.ap-section-title{font-size:16px;font-weight:800;letter-spacing:-.02em;margin-bottom:12px}
+.ap-preview-button{
+  display:block;width:100%;border:1px solid var(--line);border-radius:16px;
+  overflow:hidden;padding:0;background:var(--soft);cursor:pointer;
+}
+.ap-preview-button svg{display:block;width:100%;height:auto}
+
+/* ---------- steps ---------- */
+.ap-steps{display:grid;gap:8px}
+.ap-step{
+  display:flex;align-items:center;gap:13px;width:100%;text-align:left;
+  background:#fff;border:1px solid var(--line);border-radius:14px;
+  padding:13px 15px;font-family:inherit;cursor:pointer;
+  transition:border-color .15s;
+}
+.ap-step:hover{border-color:#d6d6db}
+.ap-step-icon{
+  width:34px;height:34px;border-radius:9px;background:var(--soft);
+  display:grid;place-items:center;flex:none;
+}
+.ap-step-icon svg{
+  width:18px;height:18px;fill:none;stroke:var(--ink);
+  stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;
+}
+.ap-step-copy{flex:1;min-width:0}
+.ap-step-title{display:block;font-size:14px;font-weight:600;letter-spacing:-.01em}
+.ap-step-description{display:block;font-size:12.5px;color:var(--muted);margin-top:1px}
+.ap-step-number{font-size:13px;font-weight:700;color:#c6c6cc;flex:none}
+
+/* ---------- about ---------- */
+.ap-about p{font-size:14px;color:var(--muted);line-height:1.6}
+.ap-about p + p{margin-top:10px}
+
+/* ---------- cta ---------- */
+.ap-cta{
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  width:100%;background:var(--coral);color:#fff;border:0;border-radius:14px;
+  padding:17px;font-family:inherit;font-size:16px;font-weight:700;
+  letter-spacing:-.01em;cursor:pointer;
+  box-shadow:0 8px 22px rgba(255,79,64,.3);
+  transition:background .15s;
+}
+.ap-cta:hover{background:var(--coral-dark)}
+.ap-secured{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  font-size:12px;color:var(--muted);margin-top:12px;
+}
+.ap-secured svg{
+  width:13px;height:13px;fill:none;stroke:var(--muted);
+  stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;
+}
+
+/* ---------- sticky ---------- */
+.ap-sticky{
+  position:fixed;left:0;right:0;bottom:0;
+  padding:12px 22px calc(14px + env(safe-area-inset-bottom));
+  background:rgba(255,255,255,.94);backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);
+}
+.ap-sticky .ap-cta{max-width:436px;margin:0 auto}
+
+/* ---------- overlay ---------- */
+.ap-overlay{position:fixed;inset:0;z-index:99;display:none;align-items:center;justify-content:center;padding:18px}
+.ap-overlay.open{display:flex}
+.ap-overlay-backdrop{position:absolute;inset:0;background:rgba(10,10,12,.45);backdrop-filter:blur(3px);border:0;cursor:pointer}
+.ap-modal{
+  position:relative;width:100%;max-width:400px;background:#fff;
+  border-radius:20px;padding:26px 22px;
+  box-shadow:0 26px 60px rgba(0,0,0,.3);
+  animation:pop .22s cubic-bezier(.2,.9,.3,1);
+}
+@keyframes pop{from{transform:translateY(14px) scale(.97);opacity:0}}
+.ap-modal-icon{
+  width:38px;height:38px;border-radius:50%;background:rgba(255,79,64,.12);
+  display:grid;place-items:center;margin-bottom:13px;
+}
+.ap-modal-icon svg{width:20px;height:20px;fill:none;stroke:var(--coral);stroke-width:1.8;stroke-linecap:round}
+.ap-modal-label{font-size:10.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.ap-modal h2{font-size:20px;font-weight:800;letter-spacing:-.03em;line-height:1.25;margin-bottom:9px}
+.ap-highlight{color:var(--coral)}
+.ap-modal p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+.ap-modal p strong{color:var(--ink)}
+.ap-modal-callout{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;padding:13px;margin-bottom:16px}
+.ap-modal-callout-number{
+  width:38px;height:38px;border-radius:10px;background:var(--coral);color:#fff;
+  display:grid;place-items:center;font-weight:800;font-size:15px;flex:none;
+}
+.ap-modal-callout-copy{font-size:13px;font-weight:600}
+.ap-modal-callout-copy span{display:block;font-size:11.5px;font-weight:400;color:var(--muted);margin-top:1px}
+.ap-modal-button{
+  display:flex;align-items:center;justify-content:center;
+  background:var(--coral);color:#fff;text-decoration:none;border-radius:13px;
+  padding:16px;font-size:15px;font-weight:700;
+  box-shadow:0 8px 20px rgba(255,79,64,.3);
+}
+.ap-modal-button:hover{background:var(--coral-dark)}
+
+/* ---------- reveal ---------- */
+.ap-reveal{animation:rise .5s cubic-bezier(.2,.9,.3,1) both}
+.ap-delay-1{animation-delay:.04s}
+.ap-delay-2{animation-delay:.09s}
+.ap-delay-3{animation-delay:.14s}
+.ap-delay-4{animation-delay:.19s}
+.ap-delay-5{animation-delay:.24s}
+.ap-delay-6{animation-delay:.29s}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}}
+
+@media (prefers-reduced-motion:reduce){
+  .ap-reveal{animation:none}
+}
+</style>
+</head>
+<body>
+
+<div class="ap-page">
+
+  <header class="ap-header ap-reveal ap-delay-1">
+    <div class="ap-app-icon" aria-label="Monzo">
+      <svg viewBox="0 0 40 40" aria-hidden="true">
+        <path d="M12 28.5V13l8 9.5 8-9.5v15.5" fill="none" stroke="#fff" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div>
+      <h1 class="ap-name">Monzo</h1>
+      <p class="ap-tagline">Instant rewards · Finance</p>
+    </div>
+  </header>
+
+  <section class="ap-stats ap-reveal ap-delay-2" aria-label="Reward details">
+    <div class="ap-stat">
+      <div class="ap-stat-value">4.8</div>
+      <div class="ap-stat-label">
+        <span class="ap-stars" aria-label="4.8 out of 5 stars"><i></i><i></i><i></i><i></i><i></i></span>
+      </div>
+    </div>
+    <span class="ap-stat-divider" aria-hidden="true"></span>
+    <div class="ap-stat">
+      <div class="ap-stat-value">#1</div>
+      <div class="ap-stat-label">Finance</div>
+    </div>
+    <span class="ap-stat-divider" aria-hidden="true"></span>
+    <div class="ap-stat">
+      <div class="ap-stat-value">18+</div>
+      <div class="ap-stat-label">Age</div>
+    </div>
+    <span class="ap-stat-divider" aria-hidden="true"></span>
+    <div class="ap-stat">
+      <div class="ap-stat-value ap-reward">£750</div>
+      <div class="ap-stat-label">Max Reward</div>
+    </div>
+  </section>
+
+  <section class="ap-section ap-reveal ap-delay-3">
+    <h2 class="ap-section-title">Preview</h2>
+    <button class="ap-preview-button" type="button" aria-label="View Monzo reward details" data-claim>
+      <svg viewBox="0 0 480 270" role="img" aria-label="Monzo reward preview">
+        <defs>
+          <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#FF6A5C"/>
+            <stop offset="1" stop-color="#E23A2C"/>
+          </linearGradient>
+        </defs>
+        <rect width="480" height="270" fill="url(#bg)"/>
+        <circle cx="418" cy="42" r="78" fill="#fff" opacity=".07"/>
+        <circle cx="52" cy="232" r="96" fill="#fff" opacity=".06"/>
+        <rect x="56" y="58" width="368" height="154" rx="20" fill="#fff"/>
+        <rect x="80" y="80" width="34" height="34" rx="10" fill="#FF4F40"/>
+        <path d="M90 105V90l7 8 7-8v15" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="124" y="94" font-family="Inter,sans-serif" font-size="13" font-weight="800" fill="#0A0A0C">monzo</text>
+        <text x="124" y="108" font-family="Inter,sans-serif" font-size="10.5" fill="#8A8A92">Reward received</text>
+        <text x="80" y="152" font-family="Inter,sans-serif" font-size="34" font-weight="800" fill="#0A0A0C" letter-spacing="-1">£750.00</text>
+        <rect x="80" y="170" width="150" height="22" rx="6" fill="#F5F5F7"/>
+        <text x="90" y="185" font-family="Inter,sans-serif" font-size="10.5" fill="#78787F">Personal account</text>
+        <rect x="300" y="80" width="104" height="26" rx="13" fill="#FF4F40" opacity=".12"/>
+        <text x="322" y="97" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#E23A2C">Pending</text>
+      </svg>
+    </button>
+  </section>
+
+  <section class="ap-section ap-reveal ap-delay-4">
+    <h2 class="ap-section-title">How It Works</h2>
+    <div class="ap-steps">
+      <button class="ap-step" type="button" data-claim>
+        <span class="ap-step-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m4 7 8 6 8-6"></path></svg></span>
+        <span class="ap-step-copy">
+          <span class="ap-step-title">Enter your email address</span>
+          <span class="ap-step-description">For notifications and rewards</span>
+        </span>
+        <span class="ap-step-number">1</span>
+      </button>
+      <button class="ap-step" type="button" data-claim>
+        <span class="ap-step-icon"><svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2"></rect><path d="M10 18.5h4"></path></svg></span>
+        <span class="ap-step-copy">
+          <span class="ap-step-title">Complete 2–3 simple offers</span>
+          <span class="ap-step-description">The more you do, the more you earn</span>
+        </span>
+        <span class="ap-step-number">2</span>
+      </button>
+      <button class="ap-step" type="button" data-claim>
+        <span class="ap-step-icon"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="3"></rect><path d="M2.5 9h19M6 15h4"></path></svg></span>
+        <span class="ap-step-copy">
+          <span class="ap-step-title">Receive your Monzo reward</span>
+          <span class="ap-step-description">Sent directly to your account</span>
+        </span>
+        <span class="ap-step-number">3</span>
+      </button>
+    </div>
+  </section>
+
+  <section class="ap-section ap-reveal ap-delay-5">
+    <h2 class="ap-section-title">About</h2>
+    <div class="ap-about">
+      <p>Complete a few quick tasks from our partners and get rewarded straight to Monzo. No fees, no waiting around — just simple offers and instant rewards.</p>
+      <p>Tap below to get started in seconds and claim your reward today.</p>
+    </div>
+  </section>
+
+  <button class="ap-cta ap-reveal ap-delay-6" type="button" data-claim>
+    <span>Get Monzo Rewards</span><span aria-hidden="true">→</span>
+  </button>
+  <p class="ap-secured">
+    <svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+    Secured &amp; paid out via Monzo
+  </p>
+
+</div>
+
+<div class="ap-sticky">
+  <button class="ap-cta" type="button" data-claim><span>Get Monzo Rewards</span><span aria-hidden="true">→</span></button>
+</div>
+
+<div class="ap-overlay" id="overlay">
+  <button class="ap-overlay-backdrop" type="button" aria-label="Close" tabindex="-1"></button>
+  <section class="ap-modal" role="dialog" aria-modal="true" aria-labelledby="age-dialog-title">
+    <div class="ap-modal-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6M12 17h.01"></path></svg></div>
+    <div class="ap-modal-label">One Last Step</div>
+    <h2 id="age-dialog-title">Select <span class="ap-highlight">18+</span> when you sign up</h2>
+    <p>To unlock your <strong>£750 Monzo gift card</strong>, you must select <strong>18+</strong> at signup. Use real info so we can verify and deliver your reward.</p>
+    <div class="ap-modal-callout">
+      <div class="ap-modal-callout-number">18+</div>
+      <div class="ap-modal-callout-copy">Pick 18+ at signup<span>Required to unlock your £750 Monzo credit</span></div>
+    </div>
+    <a class="ap-modal-button" href="https://buenohoodies.com/c/APPLEfluent">Got it&nbsp;&nbsp;→</a>
+  </section>
+</div>
+
+<script>
+(function(){
+  var o = document.getElementById('overlay');
+  function open(){ o.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function close(){ o.classList.remove('open'); document.body.style.overflow = ''; }
+
+  document.querySelectorAll('[data-claim]').forEach(function(b){
+    b.addEventListener('click', open);
+  });
+  o.querySelector('.ap-overlay-backdrop').addEventListener('click', close);
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });
+})();
+</script>
+</body>
+</html>

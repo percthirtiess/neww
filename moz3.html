@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Monzo Rewards — Earn Up to £750</title>
+<meta name="description" content="Complete a few quick tasks from our partners and get rewarded straight to Monzo. No fees, no waiting around.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --coral:#FF4F40;
+  --coral-dark:#E23A2C;
+  --ink:#111114;
+  --muted:#71747B;
+  --line:#ECECEF;
+  --soft:#F8F8FA;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:#fff;color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  line-height:1.5;
+}
+.wrap{max-width:520px;margin:0 auto;padding:0 22px}
+
+/* ---------- header / logo ---------- */
+header{
+  max-width:520px;margin:0 auto;padding:26px 22px 0;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.logo{display:flex;align-items:center;gap:9px}
+.logo svg{width:34px;height:34px;display:block;border-radius:10px}
+.logo span{
+  font-size:27px;font-weight:900;letter-spacing:-.06em;
+  color:var(--coral);line-height:1;
+}
+.note{
+  font-size:10px;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);
+}
+
+/* ---------- stats ---------- */
+.stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--line);border-radius:13px;
+  overflow:hidden;margin:24px 0 30px;
+}
+.stat{text-align:center;padding:12px 3px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat b{display:block;font-size:15px;font-weight:900;letter-spacing:-.02em}
+.stat span{
+  display:block;font-size:9px;font-weight:600;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--muted);margin-top:3px;
+}
+.stat.hi b{color:var(--coral)}
+
+/* ---------- hero ---------- */
+h1{
+  font-size:clamp(28px,8vw,36px);line-height:1.08;
+  letter-spacing:-.035em;font-weight:900;text-align:center;
+}
+h1 em{font-style:normal;color:var(--coral)}
+.lede{
+  text-align:center;font-size:14.5px;color:var(--muted);
+  margin:11px auto 0;max-width:340px;
+}
+
+/* ---------- preview ---------- */
+.label{
+  text-align:center;font-size:10px;font-weight:800;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--muted);margin:32px 0 12px;
+}
+.pcard{
+  max-width:310px;margin:0 auto;background:var(--coral);color:#fff;
+  border-radius:18px;padding:16px 18px;
+  box-shadow:0 12px 30px rgba(255,79,64,.28);
+}
+.pcard .top{
+  display:flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:800;letter-spacing:.04em;
+  text-transform:uppercase;opacity:.95;
+}
+.pcard .top svg{
+  width:20px;height:20px;border-radius:6px;
+  background:#fff;padding:3px;
+}
+.pcard .top .now{
+  margin-left:auto;font-weight:600;text-transform:none;opacity:.75;
+}
+.pcard .amt{font-size:30px;font-weight:900;letter-spacing:-.035em;margin-top:8px}
+.pcard .desc{font-size:12.5px;opacity:.95;margin-top:2px}
+
+/* ---------- sections ---------- */
+section{margin-top:40px}
+h2{
+  font-size:18px;font-weight:900;letter-spacing:-.025em;
+  text-align:center;margin-bottom:15px;
+}
+.steps{display:grid;gap:9px}
+.step{
+  display:flex;gap:12px;align-items:flex-start;
+  border:1px solid var(--line);border-radius:12px;padding:14px 15px;
+}
+.step .n{
+  flex:none;width:23px;height:23px;border-radius:6px;
+  display:grid;place-items:center;font-size:11.5px;font-weight:900;
+  background:var(--coral);color:#fff;
+}
+.step .txt{padding-top:2px}
+.step b{display:block;font-size:13.5px;font-weight:700;letter-spacing:-.01em}
+.step span{display:block;font-size:12.5px;color:var(--muted);margin-top:1px}
+
+.about{font-size:13.5px;color:var(--muted);text-align:center;line-height:1.7}
+.about strong{color:var(--ink)}
+
+/* ---------- cta ---------- */
+.cta{text-align:center;margin-top:22px}
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  width:100%;border:0;cursor:pointer;font-family:inherit;
+  background:var(--coral);color:#fff;
+  font-size:15.5px;font-weight:800;letter-spacing:-.01em;
+  padding:16px 20px;border-radius:12px;
+  box-shadow:0 8px 18px rgba(255,79,64,.28);
+  transition:background .16s, transform .12s;
+  text-decoration:none;
+}
+.btn:hover{background:var(--coral-dark)}
+.btn:active{transform:translateY(1px)}
+.btn .arrow{transition:transform .18s}
+.btn:hover .arrow{transform:translateX(3px)}
+.secured{font-size:11.5px;color:var(--muted);margin-top:11px}
+.cta.bare{margin-top:28px}
+
+/* ---------- footer ---------- */
+footer{
+  max-width:520px;margin:44px auto 0;
+  padding:22px 22px 34px;
+  border-top:1px solid var(--line);
+  font-size:10.5px;line-height:1.7;color:var(--muted);text-align:center;
+}
+footer a{color:var(--ink);text-decoration:none;font-weight:600}
+.flinks{display:flex;gap:16px;justify-content:center;margin-bottom:12px;font-size:11.5px}
+
+/* ---------- modal ---------- */
+.modal{
+  position:fixed;inset:0;z-index:90;display:none;
+  align-items:center;justify-content:center;padding:18px;
+  background:rgba(17,17,20,.5);backdrop-filter:blur(4px);
+}
+.modal.open{display:flex;animation:fade .18s ease}
+@keyframes fade{from{opacity:0}}
+.sheet{
+  position:relative;width:100%;max-width:380px;background:#fff;
+  border-radius:18px;padding:26px 22px;text-align:center;
+  box-shadow:0 24px 60px rgba(0,0,0,.28);
+  animation:pop .22s cubic-bezier(.2,.9,.3,1);
+}
+@keyframes pop{from{transform:translateY(12px) scale(.97);opacity:0}}
+.close{
+  position:absolute;top:12px;right:12px;width:29px;height:29px;border-radius:50%;
+  background:var(--soft);border:0;color:var(--muted);font-size:13px;cursor:pointer;
+}
+.eyebrow{
+  font-size:10px;font-weight:800;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:9px;
+}
+.sheet h3{font-size:19px;font-weight:900;letter-spacing:-.025em;line-height:1.25}
+.sheet h3 em{font-style:normal;color:var(--coral)}
+.sheet p{font-size:13px;color:var(--muted);margin:9px 0 15px;line-height:1.6}
+.sheet p b{color:var(--ink)}
+.agebox{
+  display:flex;gap:11px;align-items:center;text-align:left;
+  border:1px solid var(--line);border-left:3px solid var(--coral);
+  border-radius:10px;padding:12px;margin-bottom:15px;
+}
+.agebox .num{
+  flex:none;width:38px;height:38px;border-radius:9px;background:var(--coral);
+  color:#fff;display:grid;place-items:center;font-weight:900;font-size:15px;
+}
+.agebox b{display:block;font-size:12.5px}
+.agebox span{display:block;font-size:11.5px;color:var(--muted);margin-top:1px}
+
+@media (max-width:380px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(2){border-right:0}
+  .stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--line)}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 40 40" aria-hidden="true">
+      <rect width="40" height="40" rx="11" fill="#FF4F40"/>
+      <path d="M12 28.5V13l8 9.5 8-9.5v15.5" fill="none" stroke="#fff" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span>monzo</span>
+  </div>
+  <div class="note">Rewards</div>
+</header>
+
+<div class="wrap">
+
+  <div class="stats">
+    <div class="stat"><b>4.8</b><span>Rating</span></div>
+    <div class="stat"><b>#1</b><span>Finance</span></div>
+    <div class="stat"><b>18+</b><span>Age</span></div>
+    <div class="stat hi"><b>£750</b><span>Max reward</span></div>
+  </div>
+
+  <h1>Earn up to <em>£750</em></h1>
+  <p class="lede">Complete a few quick tasks and get rewarded straight to Monzo.</p>
+
+  <div class="label">Preview</div>
+  <div class="pcard">
+    <div class="top">
+      <svg viewBox="0 0 40 40">
+        <rect width="40" height="40" rx="11" fill="#FF4F40"/>
+        <path d="M12 28.5V13l8 9.5 8-9.5v15.5" fill="none" stroke="#fff" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>monzo</span>
+      <span class="now">now</span>
+    </div>
+    <div class="amt">£750.00</div>
+    <div class="desc">Reward received</div>
+  </div>
+
+  <section>
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="n">1</div>
+        <div class="txt">
+          <b>Enter your email address</b>
+          <span>For notifications and rewards</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <div class="txt">
+          <b>Complete 2–3 simple offers</b>
+          <span>The more you do, the more you earn</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <div class="txt">
+          <b>Receive your Monzo reward</b>
+          <span>Sent directly to your account</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>About</h2>
+    <p class="about">
+      Complete a few quick tasks from our partners and get rewarded straight to Monzo.
+      <strong>No fees, no waiting around</strong> — just simple offers and instant rewards.
+    </p>
+    <div class="cta">
+      <button class="btn" data-claim>Get Monzo Rewards <span class="arrow">→</span></button>
+      <p class="secured">Secured &amp; paid out via Monzo</p>
+    </div>
+  </section>
+
+  <div class="cta bare">
+    <button class="btn" data-claim>Get Monzo Rewards <span class="arrow">→</span></button>
+  </div>
+
+</div>
+
+<footer>
+  <div class="flinks">
+    <a href="#">Terms</a>
+    <a href="#">Privacy</a>
+    <a href="#">Contact</a>
+  </div>
+  <p>This promotion is not sponsored, endorsed, or administered by, or associated with, Monzo Bank Limited. All trademarks are the property of their respective owners. Reward amounts and availability may vary. Must be 18+ and a UK resident.</p>
+</footer>
+
+<div class="modal" id="modal">
+  <div class="sheet">
+    <button class="close" id="closeModal" aria-label="Close">✕</button>
+    <div class="eyebrow">One last step</div>
+    <h3>Select <em>18+</em> when you sign up</h3>
+    <p>To unlock your <b>£750 Monzo gift card</b>, you must select <b>18+</b> at signup. Use real info so we can verify and deliver your reward.</p>
+    <div class="agebox">
+      <div class="num">18+</div>
+      <div>
+        <b>Pick 18+ at signup</b>
+        <span>Required to unlock your £750 Monzo credit</span>
+      </div>
+    </div>
+    <a class="btn" href="https://buenohoodies.com/c/APPLEfluent" target="_blank" rel="noopener">Got it <span class="arrow">→</span></a>
+  </div>
+</div>
+
+<script>
+(function(){
+  var m = document.getElementById('modal');
+  function open(){ m.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function close(){ m.classList.remove('open'); document.body.style.overflow = ''; }
+
+  document.querySelectorAll('[data-claim]').forEach(function(b){
+    b.addEventListener('click', open);
+  });
+  document.getElementById('closeModal').addEventListener('click', close);
+  m.addEventListener('click', function(e){ if (e.target === m) close(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#ffffff">
+<title>Get Started</title>
+<style>
+  :root{
+    --bg:#ffffff; --surf:#fff7f7; --surf2:#fff7f7;
+    --line:#f0d7d7; --line2:rgba(220,38,38,.24);
+
+    --cy:#dc2626; --acc:#dc2626; --gold:#ef4444;
+    --ink:#1f1717; --muted:#625858; --muted2:#827676;
+    --btnink:#ffffff;
+    --grad:linear-gradient(120deg,#ef4444,#b91c1c);
+    --sh:0 1px 2px rgba(80,20,20,.08), 0 6px 18px rgba(80,20,20,.06);
+    --shc:0 2px 6px rgba(220,38,38,.22), 0 10px 26px rgba(220,38,38,.16);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    background:var(--bg); color:var(--ink);
+    font:400 16px/1.5 ui-rounded,"SF Pro Rounded",-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:24px 16px calc(20px + env(safe-area-inset-bottom));
+    overflow-x:hidden; position:relative; text-align:center;
+  }
+  body::before{
+    content:''; position:fixed; inset:-20%; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(42% 26% at 50% 2%, rgba(220,38,38,.10) 0%, transparent 66%),
+      radial-gradient(44% 28% at 88% 62%, rgba(185,28,28,.07) 0%, transparent 66%);
+    animation:wash 20s ease-in-out infinite alternate;
+  }
+  @keyframes wash{from{transform:translate3d(-2%,-1%,0) scale(1)}to{transform:translate3d(2%,2%,0) scale(1.06)}}
+  .fx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .fx i{position:absolute;bottom:-14px;width:5px;height:5px;border-radius:50%;
+    background:var(--cy);opacity:0;animation:drift linear infinite}
+  .fx i.g{width:7px;height:7px;background:var(--gold)}
+  @keyframes drift{0%{opacity:0;transform:translate3d(0,0,0)}14%{opacity:.5}84%{opacity:.34}
+    100%{opacity:0;transform:translate3d(14px,-104vh,0)}}
+
+  .wrap{position:relative;z-index:1;width:100%;max-width:380px}
+
+  .rv{opacity:0;transform:translateY(12px);animation:rv .6s cubic-bezier(.22,.9,.3,1) forwards}
+  @keyframes rv{to{opacity:1;transform:none}}
+  .d1{animation-delay:.08s}.d2{animation-delay:.18s}.d3{animation-delay:.30s}
+
+  h1{font-size:28px;line-height:1.14;letter-spacing:-.7px;font-weight:800;margin-bottom:26px}
+
+  .cta{display:block;width:100%;border:0;cursor:pointer;border-radius:15px;
+    background:var(--grad);color:var(--btnink);font-weight:800;font-size:17px;letter-spacing:.2px;
+    padding:18px;font-family:inherit;box-shadow:var(--shc);position:relative;overflow:hidden;
+    animation:pulse 2.6s ease-in-out infinite}
+  @keyframes pulse{0%,100%{box-shadow:var(--shc)}
+    50%{box-shadow:0 2px 8px rgba(220,38,38,.3), 0 12px 34px rgba(220,38,38,.26)}}
+
+  .cta.rv{animation:rv .6s cubic-bezier(.22,.9,.3,1) forwards, pulse 2.6s ease-in-out infinite}
+  .cta:active{transform:translateY(1px)}
+  .cta[disabled]{cursor:default}
+  .dots::after{content:'';animation:dots 1.2s steps(4,end) infinite}
+  @keyframes dots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
+
+  .note{min-height:18px;margin-top:12px;font-size:12.5px;color:var(--muted2)}
+  .sub{margin-top:14px;font-size:13.5px;line-height:1.55;color:var(--muted);
+    background:var(--surf);border:1px solid var(--line);border-radius:14px;
+    padding:0;max-height:0;overflow:hidden;opacity:0;
+    transition:max-height .3s ease,opacity .3s ease,padding .3s ease}
+  .sub.show{padding:13px 14px;max-height:220px;opacity:1}
+  .sub b{color:var(--acc)}
+
+  .chips{display:flex;justify-content:center;gap:7px;margin-top:30px}
+  .chips span{display:inline-flex;align-items:center;gap:5px;background:var(--surf);
+    border:1px solid var(--line);border-radius:999px;padding:7px 12px;
+    font-size:11.5px;font-weight:700;color:var(--muted2);box-shadow:var(--sh)}
+  .chips svg{width:12px;height:12px;display:block}
+
+  @media (prefers-reduced-motion:reduce){
+    .rv{animation:none;opacity:1;transform:none}
+    .cta.rv{animation:none;opacity:1;transform:none}
+    body::before,.cta,.dots::after{animation:none}
+    .fx{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="fx" aria-hidden="true">
+  <i style="left:12%;animation-duration:18s;animation-delay:0s"></i>
+  <i style="left:38%;animation-duration:22s;animation-delay:5s"></i>
+  <i style="left:68%;animation-duration:19s;animation-delay:9s"></i>
+  <i class="g" style="left:26%;animation-duration:26s;animation-delay:3s"></i>
+  <i class="g" style="left:86%;animation-duration:24s;animation-delay:7s"></i>
+</div>
+
+<div class="wrap">
+
+  <h1 class="rv d1">Almost there</h1>
+
+  <button class="cta rv d2" id="ctaBtn" type="button">Continue</button>
+  <div class="note" id="note"></div>
+  <div class="sub" id="sub"></div>
+
+  <div class="chips rv d3">
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z" fill="currentColor" stroke="none"/></svg>Safari</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4"/><path d="M12 8.6h8M9.1 13.7 5.1 20.6M14.9 13.7l-4 6.9"/></svg>Chrome</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2.4"/><path d="M8 10.5V7.4a4 4 0 0 1 8 0v3.1"/></svg>Secure</span>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var DEST = 'https://YOUR-SITE.vercel.app/YOUR-LANDER-PATH/';
+
+  var QP = new URLSearchParams(window.location.search);
+  function subid() {
+    return QP.get('campid') || QP.get('sub1') || QP.get('s1') ||
+           QP.get('s2') || QP.get('cid') || QP.get('c') || '';
+  }
+
+  var TRACK = 'https://YOUR-TRACKING-DOMAIN/t', PAGE = 'pre', sent = {};
+  function px(ev) {
+    if (sent[ev]) return; sent[ev] = 1;
+    if (TRACK.indexOf('YOUR-') !== -1) return;
+    try {
+      var u = TRACK + '?e=' + encodeURIComponent(ev) + '&id=' + encodeURIComponent(subid()) + '&p=' + PAGE;
+      if (navigator.sendBeacon) navigator.sendBeacon(u); else (new Image()).src = u + '&_=' + Date.now();
+    } catch (e) {}
+  }
+  px('load');
+  ['touchstart','pointerdown','scroll','mousemove','keydown'].forEach(function (t) {
+    window.addEventListener(t, function () { px('human'); }, { once: true, passive: true });
+  });
+
+  function inApp() {
+    return /tiktok|musical_ly|bytedance|BytedanceWebview/i.test(navigator.userAgent || '');
+  }
+  function plat() {
+    var ua = navigator.userAgent || '';
+    if (/iPad|iPhone|iPod/.test(ua)) return 'ios';
+    if (/Macintosh/.test(ua) && (navigator.maxTouchPoints || 0) > 1) return 'ios';
+    if (/android/i.test(ua)) return 'android';
+    if (inApp()) return 'android';
+    return 'other';
+  }
+
+  function out() {
+    var d = DEST, q = window.location.search;
+    if (q) d += (d.indexOf('?') === -1 ? '?' : '&') + q.slice(1);
+    return d;
+  }
+
+  var btn  = document.getElementById('ctaBtn');
+  var note = document.getElementById('note');
+  var sub  = document.getElementById('sub');
+  var tried = false, rescued = false;
+
+  function go() {
+    var dest = out();
+    var bare = dest.replace(/^https?:\/\//, '');
+    var enc  = encodeURIComponent(dest);
+    var p = plat();
+
+    var attempts = p === 'android'
+      ? [
+          'intent://' + bare + '#Intent;scheme=https;package=com.android.chrome;'
+            + 'S.browser_fallback_url=' + enc + ';end',
+          'intent://' + bare + '#Intent;scheme=https;package=com.sec.android.app.sbrowser;'
+            + 'S.browser_fallback_url=' + enc + ';end',
+          'intent://' + bare + '#Intent;scheme=https;'
+            + 'S.browser_fallback_url=' + enc + ';end'
+        ]
+      : [
+          dest.replace(/^https:\/\//, 'x-safari-https://'),
+          dest.replace(/^https:\/\//, 'googlechromes://'),
+          'firefox://open-url?url=' + enc
+        ];
+
+    var done = false, timers = [];
+    function cancel() {
+      if (done) return;
+      done = true;
+      timers.forEach(clearTimeout);
+    }
+    function tookOver() {
+      if (done) return;
+      px('continue');
+      cancel();
+    }
+    window.addEventListener('pagehide', tookOver, { once: true });
+    window.addEventListener('blur', tookOver, { once: true });
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) tookOver();
+    }, { once: true });
+
+    function jump(u) {
+      if (done) return;
+      try { (window.top || window).location.href = u; }
+      catch (e) { window.location.href = u; }
+    }
+
+    jump(attempts[0]);
+    for (var i = 1; i < attempts.length; i++) {
+      (function (u, n) { timers.push(setTimeout(function () { jump(u); }, 350 * n)); })(attempts[i], i);
+    }
+
+    timers.push(setTimeout(function () {
+      if (done) return;
+      cancel();
+      px('rescue');
+      rescued = true;
+      sub.innerHTML = 'Your app blocked the hand-off. Tap the <b>&#8226;&#8226;&#8226;</b> menu at the top of this screen and choose <b>Open in browser</b>.';
+      sub.className = 'sub show';
+      note.textContent = '';
+      btn.disabled = false;
+      btn.textContent = 'Continue anyway';
+    }, 350 * attempts.length + 900));
+  }
+
+  btn.addEventListener('click', function () {
+
+    if (rescued) { window.location.replace(out()); return; }
+    if (tried) return;
+    tried = true;
+    px('claim');
+    btn.disabled = true;
+    btn.innerHTML = 'Opening<span class="dots"></span>';
+    note.textContent = 'One moment';
+    go();
+  });
+})();
+</script>
+</body>
+</html>

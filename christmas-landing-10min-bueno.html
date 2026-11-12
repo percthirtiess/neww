@@ -1,0 +1,766 @@
+<!doctype html>
+<!--
+  Christmas-themed adaptation of the original funrewardsz.com/reco-capp3 page.
+  The original Cash App and Reco SVG marks, copy, styling, modal, and campaign-link
+  routing are retained except that the final Reco CTA now goes to Bueno Hoodies,
+  with seasonal references changed to Christmas.
+
+  Important before publishing: the original page uses a per-session countdown,
+  simulated activity notifications, and a randomly changing live counter.
+  Connect these elements to verified offer and activity data, or remove them.
+  Terms, Privacy, and Contact were placeholder links in the original page.
+  Configure and test the RedTrack / Cash App tracking on your actual domain.
+-->
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0A">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>$100 Christmas CashApp Reward</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%2300D64F'/%3E%3Ctext x='32' y='46' font-size='40' font-weight='900' font-family='Arial' fill='%23fff' text-anchor='middle'%3E%24%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root {
+  --bg: #0A0A0A;
+  --bg-card: #131315;
+  --bg-card-hi: #191919;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-hi: rgba(255, 255, 255, 0.12);
+
+  --ca-green: #00D64F;
+  --ca-green-hi: #26EC66;
+  --ca-green-soft: rgba(0, 214, 79, 0.12);
+  --ca-green-border: rgba(0, 214, 79, 0.4);
+  --ca-green-glow: rgba(0, 214, 79, 0.45);
+  --ca-green-shadow: rgba(0, 214, 79, 0.55);
+
+  --reco-1: #4A6FE8;
+  --reco-2: #9770D8;
+  --reco-3: #E56C9E;
+  --reco-4: #E8A57A;
+  --reco-grad: linear-gradient(90deg, var(--reco-1) 0%, var(--reco-2) 38%, var(--reco-3) 72%, var(--reco-4) 100%);
+  --reco-border: rgba(151, 112, 216, 0.4);
+  --reco-glow: rgba(151, 112, 216, 0.45);
+
+  --accent: #FF8A1F;
+  --accent-hi: #FFA64D;
+  --accent-soft: rgba(255, 138, 31, 0.14);
+  --accent-border: rgba(255, 138, 31, 0.4);
+  --accent-glow: rgba(255, 138, 31, 0.5);
+
+  --text: #FAFAFA;
+  --text-muted: #8B8B8B;
+  --text-dim: #5C5C5C;
+
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-pill: 999px;
+
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--font); font-size: 16px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%;
+  min-height: 100vh; overflow-x: hidden; padding-bottom: 110px;
+}
+a { text-decoration: none; color: inherit; }
+button { background: none; border: none; color: inherit; font: inherit; cursor: pointer; }
+
+@keyframes caPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+@keyframes caFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes caSheen { 0% { left: -60%; } 22% { left: 130%; } 100% { left: 130%; } }
+
+/* ---------- Activity toasts (iOS-style banners) ---------- */
+.ca-toasts {
+  position: fixed; top: calc(env(safe-area-inset-top, 0px) + 10px); left: 50%;
+  transform: translateX(-50%); z-index: 150;
+  width: 100%; max-width: 440px; padding: 0 12px; pointer-events: none;
+}
+.ca-toast {
+  display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+  background: rgba(28, 28, 30, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px;
+  backdrop-filter: blur(28px) saturate(1.6); -webkit-backdrop-filter: blur(28px) saturate(1.6);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.4);
+  transform: translateY(-130%); opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  pointer-events: auto; will-change: transform, opacity;
+}
+.ca-toast.ca-toast-show { transform: translateY(0); opacity: 1; }
+.ca-toast-icon {
+  flex-shrink: 0; width: 38px; height: 38px; border-radius: 10px;
+  background: var(--ca-green); display: grid; place-items: center;
+}
+.ca-toast-icon svg { width: 22px; height: 22px; fill: #fff; }
+.ca-toast-icon.ca-reco { background: var(--reco-grad); }
+.ca-toast-body { flex: 1; min-width: 0; }
+.ca-toast-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 2px; }
+.ca-toast-app { font-size: 10.5px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #d1d1d6; }
+.ca-toast-time { font-size: 11px; color: var(--text-dim); font-weight: 500; }
+.ca-toast-text { font-size: 13.5px; font-weight: 500; color: #fff; line-height: 1.3; }
+.ca-toast-text b { font-weight: 800; color: var(--ca-green); }
+.ca-toast-text b.ca-reco-amt { color: #E56C9E; }
+@media (prefers-reduced-motion: reduce) { .ca-toast { transition: opacity 0.3s ease; transform: translateY(0); } }
+
+/* ---------- Container ---------- */
+.ca-container { width: 100%; max-width: 480px; margin: 0 auto; padding: 16px 18px 0; }
+
+/* ---------- Top ribbon ---------- */
+.ca-ribbon {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px 14px; background: var(--bg-card);
+  border: 1px solid var(--border-hi); border-radius: var(--radius-pill);
+  margin-bottom: 18px;
+}
+.ca-ribbon-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.ca-app-icon {
+  flex-shrink: 0; width: 36px; height: 36px; border-radius: 9px;
+  background: var(--ca-green); display: grid; place-items: center;
+  box-shadow: 0 4px 14px var(--ca-green-glow);
+}
+.ca-app-icon svg { width: 22px; height: 22px; fill: #fff; }
+.ca-ribbon-labels { line-height: 1.15; }
+.ca-ribbon-title { font-size: 15px; font-weight: 800; letter-spacing: -0.01em; }
+.ca-ribbon-sub {
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent-hi); margin-top: 2px; display: inline-flex; align-items: center; gap: 5px;
+}
+.ca-ribbon-pill {
+  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+  padding: 6px 12px; background: var(--bg-card-hi);
+  border: 1px solid var(--border); border-radius: var(--radius-pill);
+  font-size: 12px; color: var(--text-muted); font-weight: 600;
+}
+.ca-ribbon-pill b { color: var(--text); font-family: var(--font-mono); font-weight: 700; }
+
+/* ---------- Hero card ---------- */
+.ca-hero {
+  position: relative; padding: 28px 20px 24px;
+  background: linear-gradient(180deg, rgba(0, 214, 79, 0.08) 0%, rgba(0, 214, 79, 0.02) 55%, rgba(0, 0, 0, 0) 100%);
+  border: 1px solid rgba(0, 214, 79, 0.22); border-radius: 22px;
+  text-align: center; overflow: hidden;
+}
+.ca-hero::before {
+  content: ''; position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
+  width: 420px; height: 420px;
+  background: radial-gradient(circle, rgba(0, 214, 79, 0.28) 0%, transparent 60%);
+  pointer-events: none; z-index: 0; filter: blur(14px);
+}
+.ca-hero::after {
+  content: ''; position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%);
+  width: 380px; height: 220px;
+  background: radial-gradient(ellipse at center, rgba(255, 138, 31, 0.28) 0%, transparent 65%);
+  pointer-events: none; z-index: 0; filter: blur(20px);
+}
+.ca-hero-inner { position: relative; z-index: 1; }
+.ca-deco-float {
+  position: absolute; font-size: 28px; opacity: 0.55; z-index: 0; pointer-events: none;
+  filter: drop-shadow(0 0 10px var(--accent-glow)); animation: caFloat 4.5s ease-in-out infinite;
+}
+.ca-deco-float.ca-pf-tl { top: 14px; left: 14px; animation-delay: 0.3s; }
+.ca-deco-float.ca-pf-tr { top: 20px; right: 16px; font-size: 22px; animation-delay: 1.1s; }
+.ca-deco-float.ca-pf-bl { bottom: 18px; left: 18px; font-size: 22px; animation-delay: 2.4s; }
+.ca-deco-float.ca-pf-br { bottom: 14px; right: 20px; font-size: 24px; animation-delay: 1.8s; }
+
+.ca-logo-tile {
+  width: 100px; height: 100px; margin: 0 auto 18px; border-radius: 24px;
+  background: var(--ca-green); display: grid; place-items: center;
+  box-shadow: 0 18px 42px -8px var(--ca-green-glow);
+  animation: caFloat 4s ease-in-out infinite;
+}
+.ca-logo-tile svg { width: 60px; height: 60px; fill: #fff; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25)); }
+
+.ca-reward-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--accent-soft); border: 1px solid var(--accent-border);
+  border-radius: var(--radius-pill); padding: 7px 14px 7px 10px;
+  font-size: 13px; font-weight: 700; color: var(--accent-hi); margin-bottom: 20px;
+}
+.ca-reward-pill .ca-deco-ico { font-size: 15px; line-height: 1; filter: drop-shadow(0 0 6px var(--accent-glow)); }
+
+.ca-credit-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--text-muted); margin-bottom: 2px;
+}
+.ca-amount {
+  font-size: 96px; font-weight: 900; line-height: 0.95; letter-spacing: -0.045em; color: #FFFFFF;
+  text-shadow: 0 10px 40px rgba(0, 214, 79, 0.3);
+}
+.ca-amount sup { font-size: 48px; font-weight: 900; vertical-align: top; margin-right: 2px; line-height: 1; position: relative; top: 10px; }
+.ca-amount-sub { font-size: 16px; color: var(--text); margin-top: 14px; font-weight: 500; }
+
+.ca-live-pill {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; padding: 9px 16px;
+  background: var(--ca-green-soft); border: 1px solid var(--ca-green-border);
+  border-radius: var(--radius-pill); color: var(--ca-green);
+  font-size: 13.5px; font-weight: 600;
+}
+.ca-live-pill .ca-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ca-green); box-shadow: 0 0 10px var(--ca-green); animation: caPulse 1.6s ease-in-out infinite; }
+.ca-live-pill b { font-family: var(--font-mono); font-weight: 700; }
+
+/* ---------- Stats row ---------- */
+.ca-stats {
+  margin-top: 14px; display: grid; grid-template-columns: 1fr 1px 1fr 1px 1fr; gap: 8px;
+  padding: 16px 10px; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: var(--radius);
+}
+.ca-stat { text-align: center; }
+.ca-stat-num { font-size: 20px; font-weight: 800; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.ca-stat-num.ca-accent { color: var(--ca-green); }
+.ca-stat-label { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
+.ca-stat-divider { background: var(--border); align-self: stretch; }
+
+/* ---------- Steps card ---------- */
+.ca-steps-card { margin-top: 14px; padding: 20px 18px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); }
+.ca-steps-title { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px; }
+.ca-step { display: flex; align-items: flex-start; gap: 14px; padding: 10px 0; }
+.ca-step + .ca-step { border-top: 1px solid var(--border); }
+.ca-step-num {
+  flex-shrink: 0; width: 30px; height: 30px; border-radius: 8px;
+  background: var(--ca-green-soft); border: 1px solid var(--ca-green-border); color: var(--ca-green);
+  font-weight: 800; font-size: 14px; display: grid; place-items: center; margin-top: 1px;
+}
+.ca-step-body { flex: 1; font-size: 15px; line-height: 1.35; padding-top: 4px; }
+.ca-step-body b { font-weight: 700; }
+.ca-step-feature {
+  flex: 1; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 14px;
+  background: linear-gradient(180deg, rgba(151, 112, 216, 0.12) 0%, rgba(74, 111, 232, 0.08) 100%);
+  border: 1px solid var(--reco-border); position: relative;
+}
+.ca-reco-tile {
+  flex-shrink: 0; width: 46px; height: 46px; border-radius: 12px;
+  background: var(--reco-grad); display: grid; place-items: center;
+  box-shadow: 0 6px 18px -4px var(--reco-glow);
+}
+.ca-reco-tile svg { width: 24px; height: 24px; fill: #FFFFFF; }
+.ca-step-feature .ca-step-body { padding-top: 0; }
+.ca-feature-title { font-size: 15px; font-weight: 800; }
+.ca-feature-tag {
+  display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 800;
+  letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px;
+  border-radius: var(--radius-pill); border: 1px solid var(--reco-border); color: #c9b6ef; margin-top: 4px;
+}
+.ca-feature-badge {
+  flex-shrink: 0; width: 26px; height: 26px; border-radius: 7px;
+  background: var(--ca-green); color: #0A0A0A; font-weight: 900; font-size: 13px;
+  display: grid; place-items: center;
+}
+
+/* ---------- Primary CTA ---------- */
+.ca-cta-wrap { margin-top: 20px; text-align: center; }
+.ca-note-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--accent-hi); margin-bottom: 10px; }
+.ca-note-pill .ca-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: caPulse 1.4s ease-in-out infinite; }
+.ca-cta {
+  display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
+  padding: 18px 24px; background: linear-gradient(180deg, var(--ca-green-hi) 0%, var(--ca-green) 100%);
+  color: #FFFFFF; border-radius: 16px; font-weight: 800; font-size: 17px;
+  letter-spacing: 0.02em; text-transform: uppercase;
+  box-shadow: 0 18px 40px -10px var(--ca-green-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  position: relative; overflow: hidden; transition: transform 0.14s ease, filter 0.2s;
+}
+.ca-cta:hover { filter: brightness(1.06); }
+.ca-cta:active { transform: scale(0.98); }
+.ca-cta::before, .ca-sticky-btn::before {
+  content: ""; position: absolute; top: 0; left: -60%; width: 45%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,0.35), transparent);
+  transform: skewX(-18deg); animation: caSheen 4.2s ease-in-out 1.2s infinite; pointer-events: none;
+}
+.ca-cta-sub { font-size: 12.5px; color: var(--text-muted); margin-top: 10px; }
+.ca-cta-sub b { color: var(--ca-green); font-weight: 700; }
+
+/* ---------- Payout rows ---------- */
+.ca-section { margin-top: 28px; }
+.ca-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; padding-left: 4px; }
+.ca-proof {
+  display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px;
+}
+.ca-proof-avatar {
+  flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
+  color: #fff; font-size: 13px; font-weight: 800; letter-spacing: 0.02em;
+  display: grid; place-items: center;
+}
+.ca-av-green { background: var(--ca-green); }
+.ca-av-blue { background: #2F6BFF; }
+.ca-av-pink { background: #E8365D; }
+.ca-proof-body { flex: 1; min-width: 0; }
+.ca-proof-name { font-size: 13.5px; font-weight: 700; }
+.ca-proof-name .ca-check { color: var(--ca-green); font-size: 12px; margin-left: 4px; }
+.ca-proof-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.ca-proof-tag { flex-shrink: 0; font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--ca-green); }
+
+/* ---------- FAQ ---------- */
+.ca-faq { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 8px; overflow: hidden; }
+.ca-faq-q {
+  width: 100%; padding: 15px 18px; font-size: 14px; font-weight: 600; text-align: left;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; user-select: none;
+}
+.ca-faq-q .ca-chev { color: var(--text-muted); transition: transform 0.2s; font-size: 11px; }
+.ca-faq.ca-open .ca-faq-q .ca-chev { transform: rotate(180deg); }
+.ca-faq-a { max-height: 0; overflow: hidden; transition: max-height 0.25s ease; padding: 0 18px; color: var(--text-muted); font-size: 13.5px; line-height: 1.55; }
+.ca-faq.ca-open .ca-faq-a { max-height: 240px; padding-bottom: 16px; }
+
+/* ---------- Disclaimer + footer ---------- */
+.ca-disclaimer { text-align: center; color: var(--text-dim); font-size: 11px; line-height: 1.55; margin: 26px 8px 12px; }
+.ca-footer-links { text-align: center; margin-bottom: 24px; }
+.ca-footer-links a { color: var(--text-muted); font-size: 12px; margin: 0 8px; }
+
+/* ---------- Bottom sheet ---------- */
+.ca-overlay { position: fixed; inset: 0; z-index: 200; pointer-events: none; opacity: 0; transition: opacity 0.3s ease; }
+.ca-overlay.ca-active { pointer-events: auto; opacity: 1; }
+.ca-overlay-bg { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.78); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.ca-modal {
+  position: absolute; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto;
+  background: #161618; border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top-left-radius: 24px; border-top-right-radius: 24px;
+  padding: 24px 22px calc(20px + env(safe-area-inset-bottom));
+  transform: translateY(105%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center; box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.5);
+}
+.ca-overlay.ca-active .ca-modal { transform: translateY(0); }
+.ca-modal-handle { width: 36px; height: 4px; background: rgba(255, 255, 255, 0.15); border-radius: 2px; margin: 0 auto 18px; }
+.ca-modal-close {
+  position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08); color: var(--text-muted); font-size: 14px; display: grid; place-items: center;
+}
+.ca-reco-hero-tile {
+  width: 72px; height: 72px; margin: 0 auto 18px; border-radius: 20px;
+  background: var(--reco-grad); display: grid; place-items: center; box-shadow: 0 12px 32px -6px var(--reco-glow);
+}
+.ca-reco-hero-tile svg { width: 36px; height: 36px; fill: #FFFFFF; }
+.ca-modal-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ca-green); margin-bottom: 10px; }
+.ca-modal-title { font-size: 24px; font-weight: 800; color: #FFFFFF; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 12px; }
+.ca-modal-title .ca-reco-hl { background: var(--reco-grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.ca-modal-body { font-size: 15px; line-height: 1.5; color: var(--text-muted); margin-bottom: 20px; }
+.ca-modal-body strong { color: #FFFFFF; font-weight: 600; }
+.ca-modal-callout {
+  display: flex; align-items: center; gap: 12px; padding: 14px; margin-bottom: 18px; text-align: left;
+  border: 1px solid var(--reco-border); border-radius: 12px;
+  background: linear-gradient(180deg, rgba(151, 112, 216, 0.1) 0%, rgba(74, 111, 232, 0.05) 100%);
+}
+.ca-callout-num {
+  flex-shrink: 0; width: 42px; height: 42px; border-radius: 10px; background: var(--reco-grad); color: #FFFFFF;
+  display: grid; place-items: center; font-weight: 900; font-size: 16px;
+}
+.ca-callout-text { font-size: 14.5px; font-weight: 600; color: var(--text); line-height: 1.3; }
+.ca-callout-text span { display: block; font-size: 12.5px; font-weight: 400; color: var(--text-muted); margin-top: 2px; }
+.ca-modal-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+  padding: 16px 22px; border-radius: 14px; color: #fff; font-size: 17px; font-weight: 800; letter-spacing: -0.01em;
+  background: var(--reco-grad); box-shadow: 0 14px 30px -6px var(--reco-glow);
+  transition: transform 0.14s ease, filter 0.2s ease;
+}
+.ca-modal-btn:hover { filter: brightness(1.06); }
+.ca-modal-btn:active { transform: scale(0.98); }
+.ca-modal-link { display: block; width: 100%; margin-top: 12px; padding: 10px; color: var(--text); font-size: 13px; font-weight: 500; }
+.ca-modal-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+.ca-modal-btn.is-busy { opacity: 0.75; pointer-events: none; }
+
+/* ---------- Sticky bottom CTA ---------- */
+.ca-sticky {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, transparent 0%, rgba(10, 10, 10, 0.95) 30%, rgba(10, 10, 10, 1) 100%);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  transform: translateY(100%); transition: transform 0.3s ease;
+}
+.ca-sticky.ca-visible { transform: translateY(0); }
+.ca-sticky-wrap { max-width: 480px; margin: 0 auto; }
+.ca-sticky-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
+  background: linear-gradient(180deg, var(--ca-green-hi) 0%, var(--ca-green) 100%); color: #FFFFFF;
+  padding: 16px; border-radius: 14px; font-weight: 800; font-size: 16px; letter-spacing: 0.02em; text-transform: uppercase;
+  box-shadow: 0 -2px 20px var(--ca-green-glow); position: relative; overflow: hidden;
+}
+.ca-sticky-sub { text-align: center; font-size: 11px; color: var(--text-dim); margin-top: 6px; }
+.ca-sticky-sub b { color: var(--accent-hi); font-weight: 700; }
+
+/* ---------- Reveal on scroll ---------- */
+.ca-reveal { opacity: 0; transform: translateY(10px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.ca-reveal.ca-in { opacity: 1; transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ca-deco-float, .ca-logo-tile, .ca-cta::before, .ca-sticky-btn::before, .ca-dot { animation: none; }
+  .ca-reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ---------- Christmas details: original Cash App green + Reco colors preserved ---------- */
+body {
+  background:
+    radial-gradient(ellipse at 50% 5%, rgba(5, 92, 44, .16), transparent 500px),
+    radial-gradient(ellipse at 5% 42%, rgba(156, 24, 41, .08), transparent 450px),
+    var(--bg);
+}
+.ca-container { position: relative; }
+.holiday-lights {
+  height: 23px; margin: -5px 7px 7px; display: flex; align-items: flex-start;
+  justify-content: space-around; position: relative; pointer-events: none;
+}
+.holiday-lights::before {
+  content: ''; position: absolute; left: 0; right: 0; top: 2px; height: 7px;
+  border-bottom: 1px solid rgba(255,255,255,.20); border-radius: 0 0 50% 50%;
+}
+.holiday-lights i {
+  position: relative; top: 7px; display: block; width: 7px; height: 10px;
+  border-radius: 48% 48% 55% 55%; background: #ffdc8d;
+  box-shadow: 0 0 8px rgba(255,222,141,.65); transform: rotate(7deg);
+}
+.holiday-lights i:nth-child(3n+1) { background: #ed4650; box-shadow: 0 0 8px rgba(237,70,80,.7); transform: rotate(-8deg); }
+.holiday-lights i:nth-child(3n+2) { background: #32df86; box-shadow: 0 0 8px rgba(50,223,134,.7); }
+.ca-ribbon { border-color: rgba(255,255,255,.14); }
+.ca-ribbon-sub, .ca-note-pill, .ca-sticky-sub b { color: #ffd091; }
+.ca-hero {
+  border-color: rgba(0,214,79,.32);
+  background: linear-gradient(180deg, rgba(0, 214, 79, .11), rgba(0, 214, 79, .025) 60%, rgba(88, 15, 24, .18));
+  box-shadow: 0 16px 45px rgba(0,0,0,.14), inset 0 1px 0 rgba(255,255,255,.04);
+}
+.ca-hero::after { background: radial-gradient(ellipse at center, rgba(219, 49, 57, .25), transparent 65%); }
+.ca-logo-tile { position: relative; }
+.holiday-hat { position: absolute; right: -14px; top: -18px; font-size: 33px; line-height: 1; transform: rotate(12deg); filter: drop-shadow(0 3px 5px rgba(0,0,0,.25)); }
+.ca-reward-pill { background: rgba(204, 38, 52, .14); border-color: rgba(255, 110, 116, .44); color: #ffd2c7; }
+.ca-deco-float { opacity: .8; filter: drop-shadow(0 0 9px rgba(255,255,255,.23)); }
+.holiday-snow { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.holiday-snow span { position: absolute; color: #eafff7; opacity: .34; font-size: 12px; animation: holidayDrift 5s ease-in-out infinite; }
+.holiday-snow span:nth-child(1) { left: 10%; top: 27%; animation-delay: -.7s; }
+.holiday-snow span:nth-child(2) { left: 27%; top: 10%; font-size: 9px; animation-delay: -2.2s; }
+.holiday-snow span:nth-child(3) { right: 21%; top: 14%; font-size: 10px; animation-delay: -1s; }
+.holiday-snow span:nth-child(4) { right: 8%; top: 38%; animation-delay: -3.1s; }
+.holiday-snow span:nth-child(5) { left: 9%; top: 61%; font-size: 9px; animation-delay: -2.5s; }
+.holiday-snow span:nth-child(6) { right: 9%; top: 74%; font-size: 10px; animation-delay: -4s; }
+.holiday-snow span:nth-child(7) { left: 25%; bottom: 8%; font-size: 9px; animation-delay: -1.7s; }
+.holiday-snow span:nth-child(8) { right: 27%; bottom: 7%; animation-delay: -3.5s; }
+@keyframes holidayDrift { 0%,100% { transform: translateY(0) rotate(0); opacity:.28; } 50% { transform: translateY(7px) rotate(20deg); opacity:.58; } }
+:focus-visible { outline: 3px solid #ffe8a6; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .holiday-snow span { animation: none; } }
+
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="ca-dollar" viewBox="0 0 24 24"><path d="M13.6 2.5h-2.4l-.35 2.3c-2.9.5-4.75 2.2-4.75 4.6 0 2.5 1.75 3.7 4.9 4.6 2.5.7 3.35 1.25 3.35 2.3 0 1.15-1.1 1.85-2.8 1.85-1.95 0-3.6-.85-4.75-2.1l-1.9 2.1c1.2 1.4 2.9 2.3 4.95 2.6l-.35 2.3h2.4l.35-2.35c3.05-.5 5.05-2.3 5.05-4.75 0-2.75-1.95-3.9-5.1-4.8-2.4-.7-3.15-1.2-3.15-2.15 0-1 1-1.65 2.55-1.65 1.6 0 2.95.65 3.95 1.65l1.85-2.05c-1.05-1.1-2.45-1.85-4.15-2.1l.35-2.35z"/></symbol>
+  <symbol id="ca-reco-glyph" viewBox="0 0 24 24"><path d="M6 3h12c.6 0 1 .4 1 1v17l-7-4-7 4V4c0-.6.4-1 1-1zm6 10.3l2.6 1.4-.5-2.9 2.1-2.1-2.9-.4L12 6.6l-1.3 2.7-2.9.4L9.9 11.8l-.5 2.9L12 13.3z"/></symbol>
+</svg>
+
+<div class="ca-toasts" aria-live="polite">
+  <div class="ca-toast" id="caToast" role="status">
+    <div class="ca-toast-icon" id="caToastIcon" aria-hidden="true"><svg><use href="#ca-dollar"/></svg></div>
+    <div class="ca-toast-body">
+      <div class="ca-toast-top"><span class="ca-toast-app" id="caToastApp">Cash App</span><span class="ca-toast-time">now</span></div>
+      <div class="ca-toast-text" id="caToastText">Mia A. just claimed <b>$100.00</b></div>
+    </div>
+  </div>
+</div>
+
+<main class="ca-container">
+  <div class="holiday-lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="ca-ribbon">
+    <div class="ca-ribbon-left">
+      <div class="ca-app-icon" aria-hidden="true"><svg><use href="#ca-dollar"/></svg></div>
+      <div class="ca-ribbon-labels">
+        <div class="ca-ribbon-title">Cash App</div>
+        <div class="ca-ribbon-sub">🎄 Christmas Special</div>
+      </div>
+    </div>
+    <div class="ca-ribbon-pill">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>
+      Bonus ends <b id="caTimer">10:00</b>
+    </div>
+  </div>
+
+  <section class="ca-hero">
+    <div class="holiday-snow" aria-hidden="true"><span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span></div>
+    <span class="ca-deco-float ca-pf-tl" aria-hidden="true">🎅</span>
+    <span class="ca-deco-float ca-pf-tr" aria-hidden="true">❄️</span>
+    <span class="ca-deco-float ca-pf-bl" aria-hidden="true">🎁</span>
+    <span class="ca-deco-float ca-pf-br" aria-hidden="true">🎄</span>
+    <div class="ca-hero-inner">
+      <div class="ca-logo-tile" aria-hidden="true"><svg><use href="#ca-dollar"/></svg><span class="holiday-hat">🎅</span></div>
+      <div class="ca-reward-pill"><span class="ca-deco-ico">🎄</span>Christmas CashApp Reward</div>
+      <div class="ca-credit-label">CashApp Credit</div>
+      <h1 class="ca-amount"><sup>$</sup>100</h1>
+      <p class="ca-amount-sub">Treat yourself this Christmas — free CashApp credit for the holiday season ❄️</p>
+      <div class="ca-live-pill"><span class="ca-dot"></span><b id="caLive">1,285</b> people claiming right now</div>
+    </div>
+  </section>
+
+  <div class="ca-stats">
+    <div class="ca-stat"><div class="ca-stat-num">12,859</div><div class="ca-stat-label">Redeemed</div></div>
+    <div class="ca-stat-divider"></div>
+    <div class="ca-stat"><div class="ca-stat-num ca-accent">2 min ago</div><div class="ca-stat-label">Last claimed</div></div>
+    <div class="ca-stat-divider"></div>
+    <div class="ca-stat"><div class="ca-stat-num">&lt;5 min</div><div class="ca-stat-label">Avg. time</div></div>
+  </div>
+
+  <div class="ca-steps-card ca-reveal">
+    <div class="ca-steps-title">How to claim your $100</div>
+    <div class="ca-step"><div class="ca-step-num">1</div><div class="ca-step-body">Tap the button below to reserve your <b>$100 spot</b></div></div>
+    <div class="ca-step">
+      <div class="ca-step-feature">
+        <div class="ca-reco-tile" aria-hidden="true"><svg><use href="#ca-reco-glyph"/></svg></div>
+        <div class="ca-step-body">
+          <div class="ca-feature-title">Download &amp; Play Reco</div>
+          <div class="ca-feature-tag">★ Quick unlock step</div>
+        </div>
+        <div class="ca-feature-badge">2</div>
+      </div>
+    </div>
+    <div class="ca-step"><div class="ca-step-num">3</div><div class="ca-step-body">Return here to <b>unlock your $100 CashApp offer</b></div></div>
+    <div class="ca-step"><div class="ca-step-num">4</div><div class="ca-step-body">Receive your <b>$100 CashApp balance</b></div></div>
+  </div>
+
+  <div class="ca-cta-wrap ca-reveal">
+    <div class="ca-note-pill"><span class="ca-dot"></span>🎄 Christmas spots almost gone</div>
+    <a href="#" class="ca-cta" data-open-sheet><span>🎄</span> Claim my $100 <span>→</span></a>
+    <div class="ca-cta-sub"><b>No credit card needed.</b> Takes under 5 minutes.</div>
+  </div>
+
+  <section class="ca-section ca-reveal">
+    <div class="ca-eyebrow">Recent CashApp payouts</div>
+    <div class="ca-proof">
+      <div class="ca-proof-avatar ca-av-green" aria-hidden="true">BC</div>
+      <div class="ca-proof-body"><div class="ca-proof-name">Blake C. <span class="ca-check">✓</span></div><div class="ca-proof-meta">Pennsylvania · paid out 33 min ago</div></div>
+      <div class="ca-proof-tag">$100</div>
+    </div>
+    <div class="ca-proof">
+      <div class="ca-proof-avatar ca-av-blue" aria-hidden="true">KF</div>
+      <div class="ca-proof-body"><div class="ca-proof-name">Kai F. <span class="ca-check">✓</span></div><div class="ca-proof-meta">Nevada · paid out 5 hrs ago</div></div>
+      <div class="ca-proof-tag">$100</div>
+    </div>
+    <div class="ca-proof">
+      <div class="ca-proof-avatar ca-av-pink" aria-hidden="true">CR</div>
+      <div class="ca-proof-body"><div class="ca-proof-name">Carter R. <span class="ca-check">✓</span></div><div class="ca-proof-meta">Massachusetts · paid out yesterday</div></div>
+      <div class="ca-proof-tag">$100</div>
+    </div>
+  </section>
+
+  <section class="ca-section ca-reveal" id="caFaq">
+    <div class="ca-eyebrow">Quick answers</div>
+    <div class="ca-faq">
+      <button type="button" class="ca-faq-q" aria-expanded="false">Is this really free? <span class="ca-chev">▼</span></button>
+      <div class="ca-faq-a">Yes. There is nothing to buy and no card is needed. You complete the Reco unlock step, return here, and finish the CashApp offer to receive your $100 credit.</div>
+    </div>
+    <div class="ca-faq">
+      <button type="button" class="ca-faq-q" aria-expanded="false">How fast does the $100 hit my CashApp? <span class="ca-chev">▼</span></button>
+      <div class="ca-faq-a">Most people finish in under 5 minutes. Once the offer confirms your completed steps, the $100 credit is released to your CashApp balance.</div>
+    </div>
+    <div class="ca-faq">
+      <button type="button" class="ca-faq-q" aria-expanded="false">What's the unlock step on Reco? <span class="ca-chev">▼</span></button>
+      <div class="ca-faq-a">Download the Reco app, sign up with your real details, select 18+ and play one quick game. That unlocks Step 2 so you can come back and claim your $100.</div>
+    </div>
+    <div class="ca-faq">
+      <button type="button" class="ca-faq-q" aria-expanded="false">Is there a catch? <span class="ca-chev">▼</span></button>
+      <div class="ca-faq-a">No catch. You must be 18+ and a US resident, use accurate details, and complete the required steps. Spots for the Christmas bonus are limited, so claim yours while it is open.</div>
+    </div>
+  </section>
+
+  <div class="ca-disclaimer">
+    This promotion is not sponsored, endorsed, or administered by, or associated with, Cash App, Block, Inc., or Reco. All trademarks are the property of their respective owners. Reward amounts and availability may vary. Must be 18+ and a US resident. By continuing you agree to our terms and the terms of the associated third-party offers.
+  </div>
+  <div class="ca-footer-links"><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Contact</a></div>
+</main>
+
+<div class="ca-overlay" id="caSheet" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="caSheetTitle">
+  <div class="ca-overlay-bg" data-close></div>
+  <div class="ca-modal">
+    <div class="ca-modal-handle"></div>
+    <button type="button" class="ca-modal-close" data-close aria-label="Close">✕</button>
+    <div class="ca-reco-hero-tile" aria-hidden="true"><svg><use href="#ca-reco-glyph"/></svg></div>
+    <div class="ca-modal-eyebrow">🎄 Step 1 required</div>
+    <h2 class="ca-modal-title" id="caSheetTitle">Download &amp; Play <span class="ca-reco-hl">Reco</span></h2>
+    <p class="ca-modal-body">Get the <strong>Reco</strong> app and play 1 quick game to qualify. Once finished, <strong>come right back here</strong> to unlock your <strong>$100 Christmas CashApp</strong> credit!</p>
+    <div class="ca-modal-callout">
+      <div class="ca-callout-num">1</div>
+      <div class="ca-callout-text">Play 1 Game on Reco &amp; select 18+ at signup<span>Required to unlock Step 2 and claim your $100 reward</span></div>
+    </div>
+    <a class="ca-modal-btn" id="caRecoGo" href="https://buenohoodies.com/c/PrescReco?campid=">Play Reco &amp; Unlock →</a>
+    <a class="ca-modal-link" id="caCashGo" href="https://www.fkn8s74mztrk.com/F3LXJ1RJ/H3DLSN24/">I registered on Reco, continue to cashapp</a>
+  </div>
+</div>
+
+<div class="ca-sticky" id="caSticky">
+  <div class="ca-sticky-wrap">
+    <a href="#" class="ca-sticky-btn" data-open-sheet><span>🎄</span> Claim my $100 <span>→</span></a>
+    <div class="ca-sticky-sub"><b>Christmas spots almost gone</b> · Takes under 5 minutes</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var sheet = document.getElementById("caSheet");
+  var recoGo = document.getElementById("caRecoGo");
+  var lastFocus = null;
+
+  function openSheet(e) {
+    e.preventDefault();
+    lastFocus = document.activeElement;
+    sheet.classList.add("ca-active");
+    sheet.setAttribute("aria-hidden", "false");
+    recoGo.focus({ preventScroll: true });
+  }
+  function closeSheet() {
+    sheet.classList.remove("ca-active");
+    sheet.setAttribute("aria-hidden", "true");
+    if (lastFocus) lastFocus.focus({ preventScroll: true });
+  }
+  document.querySelectorAll("[data-open-sheet]").forEach(function (el) { el.addEventListener("click", openSheet); });
+  sheet.querySelectorAll("[data-close]").forEach(function (el) { el.addEventListener("click", closeSheet); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && sheet.classList.contains("ca-active")) closeSheet(); });
+
+  // FAQ accordion
+  document.querySelectorAll(".ca-faq-q").forEach(function (q) {
+    q.addEventListener("click", function () {
+      var open = q.parentNode.classList.toggle("ca-open");
+      q.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  });
+
+  // Bonus countdown: 10 minutes, kept across reloads within the session.
+  // Use a new key so an older 30-minute countdown cannot carry over.
+  var timerEl = document.getElementById("caTimer");
+  var endAt = 0;
+  try { endAt = Number(sessionStorage.getItem("caBonusEnd10")) || 0; } catch (err) {}
+  if (!endAt || endAt < Date.now()) {
+    endAt = Date.now() + 10 * 60 * 1000;
+    try { sessionStorage.setItem("caBonusEnd10", String(endAt)); } catch (err) {}
+  }
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function tick() {
+    var s = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
+    timerEl.textContent = pad(Math.floor(s / 60)) + ":" + pad(s % 60);
+  }
+  tick(); setInterval(tick, 1000);
+
+  // Live counter drifts gently
+  var liveEl = document.getElementById("caLive");
+  var live = 1285;
+  setInterval(function () {
+    live += Math.floor(Math.random() * 7) - 3;
+    if (live < 1240) live = 1240; if (live > 1330) live = 1330;
+    liveEl.textContent = live.toLocaleString("en-US");
+  }, 4000);
+
+  // Activity toasts: rotate through recent claims
+  var toast = document.getElementById("caToast");
+  var toastIcon = document.getElementById("caToastIcon");
+  var toastApp = document.getElementById("caToastApp");
+  var toastText = document.getElementById("caToastText");
+  var feed = [
+    { app: "Cash App", reco: false, html: "Mia A. just claimed <b>$100.00</b>" },
+    { app: "Reco", reco: true, html: "Camila F. just earned <b class=\"ca-reco-amt\">$215</b> from Reco" },
+    { app: "Cash App", reco: false, html: "Jordan P. just claimed <b>$100.00</b>" },
+    { app: "Reco", reco: true, html: "Ethan L. just earned <b class=\"ca-reco-amt\">$180</b> from Reco" },
+    { app: "Cash App", reco: false, html: "Sofia M. just claimed <b>$100.00</b>" }
+  ];
+  var fi = 0;
+  function showToast() {
+    var item = feed[fi++ % feed.length];
+    toastApp.textContent = item.app;
+    toastText.innerHTML = item.html;
+    toastIcon.className = "ca-toast-icon" + (item.reco ? " ca-reco" : "");
+    toastIcon.innerHTML = item.reco ? "<svg><use href=\"#ca-reco-glyph\"/></svg>" : "<svg><use href=\"#ca-dollar\"/></svg>";
+    toast.classList.add("ca-toast-show");
+    setTimeout(function () { toast.classList.remove("ca-toast-show"); }, 5200);
+  }
+  setTimeout(showToast, 1400);
+  setInterval(showToast, 12000);
+
+  // Sticky CTA: hidden while the main CTA is on screen
+  var sticky = document.getElementById("caSticky");
+  var mainCta = document.querySelector(".ca-cta");
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      sticky.classList.toggle("ca-visible", !entries[0].isIntersecting);
+    }).observe(mainCta);
+    var revealer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add("ca-in"); revealer.unobserve(en.target); }
+      });
+    }, { rootMargin: "0px 0px -40px 0px" });
+    document.querySelectorAll(".ca-reveal").forEach(function (el) { revealer.observe(el); });
+  } else {
+    sticky.classList.add("ca-visible");
+    document.querySelectorAll(".ca-reveal").forEach(function (el) { el.classList.add("ca-in"); });
+  }
+})();
+</script>
+<script>
+// Preserve the original RedTrack click-id lookup for the separate Cash App link.
+function rtValidId(id){
+  return !!id && id !== 'undefined' && id !== 'null';
+}
+// Where unilpclick.js keeps the click id: sessionStorage 'rtkclickid', its
+// rawData global, and the 'rtkclickid-store' cookie.
+function rtStoredClickId(){
+  var id;
+  try{ id = sessionStorage.getItem('rtkclickid'); }catch(e){}
+  if(rtValidId(id)) return id;
+  try{ id = window.rawData && window.rawData.clickid; }catch(e){}
+  if(rtValidId(id)) return id;
+  var m = document.cookie.match(/(?:^|; )rtkclickid-store=([^;]*)/);
+  id = m && m[1];
+  return rtValidId(id) ? id : '';
+}
+// A valid click id in the page URL takes priority for the Cash App link.
+var RT_URL_CLICKID = (function(){
+  var id = '';
+  try{ id = new URLSearchParams(window.location.search).get('clickid') || ''; }catch(e){}
+  return rtValidId(id) && /^[A-Za-z0-9_-]{8,}$/.test(id) ? id : '';
+})();
+
+// Final Reco CTA: read campid from the current URL at click time and forward
+// only that parameter to Bueno Hoodies, including when it is empty.
+(function(){
+  var link = document.getElementById('caRecoGo');
+  if(!link) return;
+  var navigating = false;
+  link.addEventListener('click', function(e){
+    e.preventDefault();
+    if(navigating) return;
+    navigating = true;
+    link.classList.add('is-busy');
+    var params = new URLSearchParams(window.location.search);
+    var campid = params.get('campid') || '';
+    var href = 'https://buenohoodies.com/c/PrescReco?campid=' + encodeURIComponent(campid);
+    // Allow any existing click-tracking requests to start before navigation.
+    setTimeout(function(){ window.location.href = href; }, 500);
+  });
+})();
+</script>
+<script>
+// Cash App text link: goes straight to the Fluent offer with the batch in sub1 and the RedTrack click id in sub2.
+(function(){
+  var link = document.getElementById('caCashGo');
+  if(!link) return;
+  var base = 'https://www.fkn8s74mztrk.com/F3LXJ1RJ/H3DLSN24/';
+  function build(){
+    var u = new URL(base), batch = '', id = '';
+    try{ batch = new URLSearchParams(window.location.search).get('batch') || ''; }catch(e){}
+    id = RT_URL_CLICKID || rtStoredClickId();
+    if(batch) u.searchParams.set('sub1', batch);
+    if(id) u.searchParams.set('sub2', id);
+    return u.toString();
+  }
+  link.href = build();
+  link.addEventListener('click', function(){ link.href = build(); });
+})();
+</script>
+<script>
+// Backup for a lander opened directly (no ?clickid=): unilpclick.js fetches a
+// click id client-side, exactly as before.
+if(!RT_URL_CLICKID){
+  document.write('<script src="https://trk.sadijas2398sad.com/unilpclick.js?attribution=lastpaid&cookiedomain=funrewardsz.com&cookieduration=90&defaultcampaignid=&regviewonce=false&script_id=6ac50967b168010faa6efe43"><\/script>');
+}
+</script>
+</body>
+</html>
